@@ -42,7 +42,7 @@ def main():
     # Ask for confirmation before deleting the namespace
     confirmation = input('Are you sure you want to delete the namespace "{}"? (y/n) '.format(namespace)).lower()
     if confirmation != 'y':
-        print('Aborting...')
+        print(f"{Fore.GREEN}Aborting...")
         sys.exit()
 
     # Delete the namespace using kubectl
