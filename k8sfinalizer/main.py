@@ -4,6 +4,7 @@ import json
 import requests
 import sys
 import argparse
+from colorama import Fore, Style
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Welcome to the tool that will help you delete annoying terminating namespaces')
@@ -26,6 +27,9 @@ def main():
     p = subprocess.Popen(['kubectl', 'get', 'namespace', namespace, '-o', 'json'], stdout=subprocess.PIPE)
     p.wait()
     data = json.load(p.stdout)
+
+    # Print the namespace data in red color
+    print(f"{Fore.RED}Feyenoord 1#{Style.RESET_ALL} Namespace data: {Fore.WHITE}{namespace}{Style.RESET_ALL}")
     print(json.dumps(data, indent=4))
 
     # Remove the finalizers from the namespace data
@@ -34,9 +38,6 @@ def main():
     # Send a PUT request to the Kubernetes API to update the namespace data
     response = requests.put('http://127.0.0.1:8001/api/v1/namespaces/{}/finalize'.format(namespace), json=data)
     response.raise_for_status()
-
-    # Print the response content
-    print(response.content.decode())
 
     # Ask for confirmation before deleting the namespace
     confirmation = input('Are you sure you want to delete the namespace "{}"? (y/n) '.format(namespace)).lower()
